@@ -1,4 +1,5 @@
 import pandas as pd
+from fpdf import FPDF
 import glob
 # glob returns all file paths that match a specific pattern, in the form of a list. It, basically, iterates through a
 # folder and gets file paths with a specific pattern, then returns them as a list.
@@ -8,4 +9,17 @@ print(filepaths)
 
 for filepath in filepaths:
     df = pd.read_excel(filepath, sheet_name="Sheet 1")
-    print(df)
+    filename = filepath[9:24]
+    invoice_nr = filename.split("-")[0]  # gets the invoice number used for the pdf.cell section
+    # create pdf object
+    pdf = FPDF(orientation="P", unit="mm", format="A4")
+    # add the object to a pdf page
+    pdf.add_page()
+    # set the styles for what will be put on the pdf
+    pdf.set_font(family="Times", size=16, style="B")
+    # information to the page
+    pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice_nr}")
+    pdf.output(f"PDFs/{filename}.pdf")
+
+
+
